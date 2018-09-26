@@ -32,4 +32,10 @@
   .fn-detail-summary .fn-detail-git .dl-horizontal dd {
     margin-left: 97px;
   }
+  #stats-bar {
+    height: 5px;
+  }
+  .dropdown-menu {
+    min-width: 103px;
+  }
 }

@@ -16,6 +16,7 @@ export class FunctionDetailPage extends Component {
     this.handleCloseBadgeModal = this.handleCloseBadgeModal.bind(this);
     this.hoverOn = this.hoverOn.bind(this);
     this.hoverOff = this.hoverOff.bind(this);
+    this.toggleStatsPeriod = this.toggleStatsPeriod.bind(this)
     this.state = {
       isLoading: true,
       fn: null,
@@ -24,6 +25,7 @@ export class FunctionDetailPage extends Component {
       functionName,
       showBadgeModal: false,
       copiedIcon: false,
+      statsForOneHour: true,
     };    
   }
   componentDidMount() {
@@ -45,8 +47,14 @@ export class FunctionDetailPage extends Component {
   hoverOff() { 
     document.body.style.cursor = "default"; 
   }
+  toggleStatsPeriod() {
+    this.setState(prevState => ({
+      statsForOneHour: !prevState.statsForOneHour
+    }));
+    console.log(this.state.statsForOneHour)
+  }  
   render() {
-    const { isLoading, fn } = this.state;
+    const { isLoading, fn, statsForOneHour } = this.state;
     const badgeImage = "https://img.shields.io/badge/openfaas-cloud-blue.svg"
     const badgeLink = "https://www.openfaas.com"
     const badgeMd = `[![OpenFaaS](${badgeImage})](${badgeLink})`
@@ -63,7 +71,7 @@ export class FunctionDetailPage extends Component {
     } else {
       panelBody = (
         <div className="panel-body">
-          <FunctionDetailSummary fn={fn} handleShowBadgeModal={this.handleShowBadgeModal}/>
+          <FunctionDetailSummary fn={fn} statsForOneHour={statsForOneHour} toggleStatsPeriod={this.toggleStatsPeriod} handleShowBadgeModal={this.handleShowBadgeModal}/>
         </div>
       );
     }

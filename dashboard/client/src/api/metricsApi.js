@@ -1,0 +1,4 @@
+class MetricsApi {
+  constructor() {
+  }
+}

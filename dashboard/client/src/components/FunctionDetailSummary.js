@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
 import { faAward } from '@fortawesome/free-solid-svg-icons';
-import { Button } from 'react-bootstrap';
+import { ButtonGroup, Button, Col, ProgressBar } from 'react-bootstrap';
 import './FunctionDetailSummary.css';
 
 const renderContainerImage = image => {
@@ -24,14 +24,23 @@ const renderContainerImage = image => {
   }
 };
 
-export const FunctionDetailSummary = ({ fn, handleShowBadgeModal }) => {
+const checkDefaultStats = stats => {
+  if (stats === true){
+    console.log('1hour active')
+    return 'active'
+  } else {
+    console.log('24hour active')
+    return ''
+  }
+}
+export const FunctionDetailSummary = ({ fn, statsForOneHour, toggleStatsPeriod, handleShowBadgeModal }) => {
   const to = `${fn.shortName}/log?repoPath=${fn.gitOwner}/${
     fn.gitRepo
   }&commitSHA=${fn.gitSha}`;
   const repo = `${fn.gitOwner}/${fn.gitRepo}`;
   return (
     <div className="fn-detail-summary row">
-      <div className="col-md-5">
+      <Col sm={6} md={5}>
         <div className="panel panel-default fn-detail-deployment">
           <div className="panel-body">
             <div>
@@ -60,8 +69,8 @@ export const FunctionDetailSummary = ({ fn, handleShowBadgeModal }) => {
             </dl>
           </div>
         </div>
-      </div>
-      <div className="col-md-5">
+      </Col>
+      <Col sm={6} md={4}>
         <div className="panel panel-default fn-detail-git">
           <div className="panel-body">
             <div>
@@ -93,21 +102,38 @@ export const FunctionDetailSummary = ({ fn, handleShowBadgeModal }) => {
             </dl>
           </div>
         </div>
-      </div>
-      <div className="col-sm-4 col-md-2">
+      </Col>
+      <Col sm={6} md={3}>
         <div className="panel panel-default invocation-count">
           <div className="panel-body">
             <div>
+              <div className="pull-right">
+                <div>
+                <ButtonGroup>
+                  <Button className={checkDefaultStats(statsForOneHour)} onClick={toggleStatsPeriod} >1h</Button>
+                  <Button className={checkDefaultStats(!statsForOneHour)} onClick={toggleStatsPeriod}>24h</Button>  
+                </ButtonGroup>  
+                </div>
+
+              </div>
               <h4>
-                Invocations <FontAwesomeIcon icon="bolt" />
+                Stats <FontAwesomeIcon icon="bolt" />
               </h4>
-            </div>
-            <div>
-              <p>{fn.invocationCount}</p>
-            </div>
+              <br/> 
+              <div>
+                <ProgressBar max={100} id="stats-bar">
+                  <ProgressBar striped bsStyle="success" now={75} key={1} />
+                  <ProgressBar active bsStyle="danger" now={15} key={2} />
+                </ProgressBar>
+              </div>
+                  Total: 10 <br/>
+                  Success: 8 <br/>
+                  Error: 2 <br/> <br/>
+
+            </div>     
           </div>
         </div>
-      </div>
+      </Col>
     </div>
   );
 };
